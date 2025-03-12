@@ -29,5 +29,8 @@ Feature: Policy scheduler composition
 
     # render 1
     When crossplane renders the composition
-    Then check that no resources are provisioning
-    # TODO follow the example from service-account.feature and write similar steps to test the policy scheduler composition
+    Then check that 2 resources are provisioning
+    And check that resource role has parameters
+      | param name    | param value   |
+      | metadata.name | scheduler-production |
+    # | spec.forProvider.permissionsBoundary | {regexp}*/sc-policy-cdk-pipeline-permission-boundary |
