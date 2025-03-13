@@ -1,7 +1,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xpolicyscheduler.policyscheduler.example.com
+  name: xpolicyschedulers.policyscheduler.example.com
 spec:
   group: policyscheduler.example.com
   names:
