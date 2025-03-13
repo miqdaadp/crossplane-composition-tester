@@ -11,7 +11,7 @@ spec:
     kind: PolicyScheduler
     plural: policyscheduler
   enforcedCompositionRef:
-    name: xpolicyscheduler.aws.policyscheduler.example.com
+    name: xpolicyscheduler.aws.example.com
   versions:
     - name: v1alpha1
       served: true
