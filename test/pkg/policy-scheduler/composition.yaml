@@ -70,6 +70,8 @@ spec:
                   }
               providerConfigRef:
                 name: aws-provider
+            readinessChecks:
+              - type: None
             ---
             apiVersion: iam.aws.crossplane.io/v1beta1
             kind: Policy
@@ -90,6 +92,8 @@ spec:
                   }
               providerConfigRef:
                 name: aws-provider
+            readinessChecks:
+              - type: None
             ---
             apiVersion: iam.aws.crossplane.io/v1beta1
             kind: RolePolicyAttachment
