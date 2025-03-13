@@ -18,8 +18,9 @@ kind: XPolicyScheduler
 metadata:
   labels:
     crossplane.io/claim-name: scheduler-production
-    crossplane.io/claim-namespace: app
+    crossplane.io/claim-namespace: crossplane-system
   name: scheduler-production
+  namespace: crossplane-system
 spec:
   schedules:
   - policyArn: arn:aws:iam::aws:policy/AmazonPolicy1
