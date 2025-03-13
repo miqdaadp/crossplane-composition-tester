@@ -1,16 +1,14 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xpolicyschedulers.policyscheduler.example.com  # Fixed name format
+  name: xpolicyscheduler.example.com
 spec:
-  group: policyscheduler.example.com  # Custom API group
+  group: policyscheduler.example.com
   names:
     kind: XPolicyScheduler
     plural: xpolicyschedulers
-    singular: xpolicyscheduler  # Optional: Add singular name for consistency
-  scope: Namespaced  # Can be Namespaced or Cluster depending on your use case
   enforcedCompositionRef:
-    name: xpolicyscheduler.aws.policyscheduler.example.com  # Correct the name
+    name: xpolicyscheduler.aws.example.com
   versions:
     - name: v1alpha1
       served: true
@@ -24,22 +22,20 @@ spec:
               properties:
                 schedules:
                   type: array
-                  description: "List of schedules"
+                  description: list of schedules
                   items:
                     type: object
-                    description: "Schedule of policy assignment to role"
+                    description: Description of the schedule of the policy assignment to the role. The role must be provisioned and must have the policy assigned ONLY during the time interval (from->until)
                     properties:
                       roleName:
                         type: string
-                        description: "IAM role to provision and attach policy to"
+                        description: The role to provision and attach the policy to
                       policyArn:
                         type: string
-                        description: "Policy ARN to attach to the role"
+                        description: The policy ARN to attach to the role
                       scheduleFrom:
                         type: string
-                        format: date-time  # Ensure correct format for time
-                        description: "Start time  (e.g., 2023-01-01T00:00:00Z)"
+                        description: Start time
                       scheduleUntil:
                         type: string
-                        format: date-time  # Ensure correct format for time
-                        description: "End time (e.g.,2023-12-31T23:59:59Z)"
+                        description: End time
