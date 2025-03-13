@@ -38,7 +38,9 @@ spec:
                         description: The policy ARN to attach to the role
                       scheduleFrom:
                         type: string
-                        description: Start time
+                        format: date-time
+                        description: The timestamp when the policy should be attached to the role (ISO 8601 format, e.g., 2025-03-13T07:35:05Z)
                       scheduleUntil:
                         type: string
-                        description: End time
+                        format: date-time
+                        description:  description: The timestamp when the policy should be detached from the role (ISO 8601 format, e.g., 2025-03-15T07:35:05Z)
