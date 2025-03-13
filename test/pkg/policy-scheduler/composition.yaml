@@ -19,7 +19,7 @@ metadata:
 spec:
   compositeTypeRef:
     apiVersion: policyscheduler.example.com/v1alpha1
-    kind: XPolicyScheduler
+    kind: PolicyScheduler
   mode: Pipeline
   pipeline:
   - step: environmentConfigs
