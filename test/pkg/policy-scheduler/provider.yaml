@@ -1,0 +1,6 @@
+apiVersion: package.crossplane.io/v1
+kind: Provider
+metadata:
+  name: aws
+spec:
+  package: crossplane/provider-aws:v0.21.0
