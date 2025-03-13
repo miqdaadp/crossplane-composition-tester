@@ -8,7 +8,7 @@ spec:
     kind: XPolicyScheduler
     plural: xpolicyschedulers
   enforcedCompositionRef:
-    name: xpolicyscheduler.aws.policyscheduler.example.com  # Ensure this matches your Composition name
+    name: xpolicyschedulers.aws.policyscheduler.example.com  # Ensure this matches your Composition name
   versions:
     - name: v1alpha1
       served: true

@@ -15,7 +15,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xpolicyscheduler.aws.policyscheduler.example.com
+  name: xpolicyschedulers.aws.policyscheduler.example.com
 spec:
   compositeTypeRef:
     apiVersion: policyscheduler.example.com/v1alpha1
