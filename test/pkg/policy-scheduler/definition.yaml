@@ -1,14 +1,14 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xpolicyschedulers.policyscheduler.example.com 
+  name: xpolicyscheduler.example.com
 spec:
   group: policyscheduler.example.com
   names:
     kind: XPolicyScheduler
     plural: xpolicyschedulers
   enforcedCompositionRef:
-    name: xpolicyscheduler.aws.policyscheduler.example.com
+    name: xpolicyscheduler.aws.example.com
   versions:
     - name: v1alpha1
       served: true
