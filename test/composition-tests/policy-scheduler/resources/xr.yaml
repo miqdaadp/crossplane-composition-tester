@@ -21,6 +21,8 @@ metadata:
     crossplane.io/claim-namespace: crossplane-system
   name: scheduler-production
   namespace: crossplane-system
+  CompositionRef:
+    name: xpolicyscheduler.aws.policyscheduler.example.com
 spec:
   schedules:
   - policyArn: arn:aws:iam::aws:policy/AmazonPolicy1
