@@ -22,8 +22,6 @@ metadata:
   name: scheduler-production
   namespace: crossplane-system
 spec:
-  CompositionRef:
-    name: xpolicyscheduler.aws.policyscheduler.example.com
   schedules:
   - policyArn: arn:aws:iam::aws:policy/AmazonPolicy1
     roleName: role-app-1
