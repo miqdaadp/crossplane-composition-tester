@@ -42,10 +42,10 @@ spec:
       source: Inline
       inline:
         template: |-
-          {{- $currentTime := now | date "2006-01-02T15:04:05Z" }}
+          {{- $currentTime := now | date "2025-03-13T07:35:05Z" }}
           {{- range .observed.composite.spec.schedules }}
-            {{- $scheduleFrom := .scheduleFrom | date "2006-01-02T15:04:05Z" }}
-            {{- $scheduleUntil := .scheduleUntil | date "2006-01-02T15:04:05Z" }}
+            {{- $scheduleFrom := .scheduleFrom | date "2025-03-13T07:35:05Z" }}
+            {{- $scheduleUntil := .scheduleUntil | date "2025-03-15T07:35:05Z" }}
             
             {{- if and (ge $currentTime $scheduleFrom) (le $currentTime $scheduleUntil) }}
             ---
