@@ -7,8 +7,10 @@ spec:
   names:
     kind: XPolicyScheduler
     plural: xpolicyschedulers
+    singular: xpolicyscheduler  # Optional: Add singular name for consistency
+  scope: Namespaced  # Can be Namespaced or Cluster depending on your use case
   enforcedCompositionRef:
-    name: xpolicyscheduler.aws.policyscheduler.example.com
+    name: xpolicyscheduler.aws.policyscheduler.example.com  # Correct the name
   versions:
     - name: v1alpha1
       served: true
