@@ -26,9 +26,9 @@ spec:
   - policyArn: arn:aws:iam::aws:policy/AmazonPolicy1
     roleName: role-app-1
     scheduleFrom: "2025-03-12T07:35:05Z"
-    scheduleUntil: "2025-03-12T07:35:05Z"
+    scheduleUntil: "2025-03-15T07:35:05Z"
   - policyArn: arn:aws:iam::aws:policy/AmazonPolicy2
     roleName: role-app-2
     scheduleFrom: "2025-03-12T07:35:05Z"
-    scheduleUntil: "2025-03-12T07:35:05Z"
+    scheduleUntil: "2025-03-15T07:35:05Z"
 
