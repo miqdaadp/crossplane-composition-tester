@@ -1,111 +1,65 @@
-# Copyright 2023 Swisscom (Schweiz) AG
-
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-apiVersion: apiextensions.crossplane.io/v1
-kind: Composition
-metadata:
-  name: xpolicyscheduler.aws.example.com
-spec:
-  compositeTypeRef:
-    apiVersion: policyscheduler.example.com/v1alpha1
-    kind: XPolicyScheduler
-  mode: Pipeline
-  pipeline:
-  - step: environmentConfigs
-    functionRef:
-      name: function-environment-configs
-    input:
-      apiVersion: environmentconfigs.fn.crossplane.io/v1beta1
-      kind: Input
+inline:
+  template: |-
+    {{- $currentTime := now | date "2006-01-02T15:04:05Z" }}
+    {{- range .observed.composite.spec.schedules }}
+      {{- $scheduleFrom := .scheduleFrom | date "2006-01-02T15:04:05Z" }}
+      {{- $scheduleUntil := .scheduleUntil | date "2006-01-02T15:04:05Z" }}
+      
+      {{- if and (ge $currentTime $scheduleFrom) (le $currentTime $scheduleUntil) }}
+      ---
+      apiVersion: iam.aws.crossplane.io/v1beta1
+      kind: Role
+      metadata:
+        name: {{ .roleName }}
       spec:
-        environmentConfigs:
-        - type: Reference
-          ref:
-            name: envconfig
-  - functionRef:
-      name: function-go-templating
-    step: roleandpolicy
-    input:
-      apiVersion: gotemplating.fn.crossplane.io/v1beta1
-      kind: GoTemplate
-      source: Inline
-      inline:
-        template: |-
-          {{- $currentTime := now | date "2006-01-02T15:04:05Z" }}
-          {{- range .observed.composite.spec.schedules }}
-            {{- $scheduleFrom := .scheduleFrom }}
-            {{- $scheduleUntil := .scheduleUntil }}
-            
-            {{- if and (ge $currentTime $scheduleFrom) (le $currentTime $scheduleUntil) }}
-            ---
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: Role
-            metadata:
-              name: role-app-1
-            spec:
-              forProvider:
-                assumeRolePolicyDocument: |
-                  {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Principal": {
-                          "Service": "ec2.amazonaws.com"
-                        },
-                        "Action": "sts:AssumeRole"
-                      }
-                    ]
-                  }
-              providerConfigRef:
-                name: aws-provider
-            ---
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: Policy
-            metadata:
-              name: AmazonPolicy1
-            spec:
-              forProvider:
-                document: |
-                  {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": "s3:ListBucket",
-                        "Resource": "*"
-                      }
-                    ]
-                  }
-              providerConfigRef:
-                name: aws-provider
-            ---
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            metadata:
-              name: rolepolicy1-attachment
-            spec:
-              forProvider:
-                policyArnRef:
-                  name: arn:aws:iam::aws:policy/AmazonPolicy1
-                roleNameRef:
-                  name: role-app-1
-              providerConfigRef:
-                name: aws-provider
-            {{- end }}
-          {{- end }}
-
-  - step: automatically-detect-ready-composed-resources
-    functionRef:
-      name: function-auto-ready
+        forProvider:
+          assumeRolePolicyDocument: |
+            {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": "ec2.amazonaws.com"
+                  },
+                  "Action": "sts:AssumeRole"
+                }
+              ]
+            }
+        providerConfigRef:
+          name: aws-provider
+      ---
+      apiVersion: iam.aws.crossplane.io/v1beta1
+      kind: Policy
+      metadata:
+        name: {{ .policyArn | base | split ":" | last }}
+      spec:
+        forProvider:
+          document: |
+            {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "s3:ListBucket",
+                  "Resource": "*"
+                }
+              ]
+            }
+        providerConfigRef:
+          name: aws-provider
+      ---
+      apiVersion: iam.aws.crossplane.io/v1beta1
+      kind: RolePolicyAttachment
+      metadata:
+        name: {{ .roleName }}-policy-attachment
+      spec:
+        forProvider:
+          policyArnRef:
+            name: {{ .policyArn }}
+          roleNameRef:
+            name: {{ .roleName }}
+        providerConfigRef:
+          name: aws-provider
+      {{- end }}
+    {{- end }}
