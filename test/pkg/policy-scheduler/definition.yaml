@@ -7,8 +7,11 @@ spec:
   names:
     kind: XPolicyScheduler
     plural: xpolicyschedulers
-  enforcedCompositionRef:
-    name: xpolicyscheduler.aws.example.com
+  spec:
+    properties:
+      CompositionRef:
+        type: object
+        description: "References the composition to use for this resource"
   versions:
     - name: v1alpha1
       served: true
