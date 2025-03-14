@@ -25,12 +25,38 @@ Feature: Policy scheduler composition
     Then check that no resources are provisioning
 
   @normal
-  Scenario: TODO
+  Scenario: Test the role and policies as per the schedule
 
     # render 1
     When crossplane renders the composition
     Then check that 2 resources are provisioning
     And check that resource role has parameters
-      | param name    | param value   |
-      | metadata.name | scheduler-production |
+    | param name      | param value                 |
+    | scheduleFrom    | 2025-03-14T07:35:05Z       |
+    | scheduleUntil   | 2025-03-15T07:35:05Z       |
+    | metadata.name   | scheduler-claim |
     # | spec.forProvider.permissionsBoundary | {regexp}*/sc-policy-cdk-pipeline-permission-boundary |
+
+    # render 2
+    Given change observed resource role with status NOT READY and parameters
+      | param name            | param value |
+      | status.atProvider.arn | arn::role   |
+    And change observed resource default-policy with status NOT READY and parameters
+      | param name            | param value         |
+      | status.atProvider.arn | arn::default-policy |
+    When crossplane renders the composition
+    Then check that 2 resources are provisioning and they are
+      | resource-name  |
+      | role           |
+      | default-policy |
+
+
+    # render 3
+    Given change all observed resources with status READY
+    When crossplane renders the composition
+    Then log desired resources
+
+    # render 4
+    Given change all observed resources with status NOT READY
+    When crossplane renders the composition
+    Then log desired resources
