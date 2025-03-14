@@ -17,9 +17,9 @@ apiVersion: policyscheduler.example.com/v1alpha1
 kind: PolicyScheduler
 metadata:
   labels:
-    crossplane.io/claim-name: scheduler-production
+    crossplane.io/claim-name: scheduler-claim
     crossplane.io/claim-namespace: crossplane-system
-  name: scheduler-production
+  name: scheduler-claim
   namespace: crossplane-system
 spec:
   schedules:

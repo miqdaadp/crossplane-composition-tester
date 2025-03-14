@@ -19,7 +19,7 @@ metadata:
 spec:
   compositeTypeRef:
     apiVersion: policyscheduler.example.com/v1alpha1
-    kind: PolicyScheduler
+    kind: XPolicyScheduler
   mode: Pipeline
   pipeline:
   - step: environmentConfigs
@@ -41,8 +41,8 @@ spec:
       kind: GoTemplate
       source: Inline
       inline:
-        template: |-
-          {{- $currentTime := now | date "2025-03-13T07:35:05Z" }}
+        template: |-    
+          {{- $currentTime := now }}
           {{- range .observed.composite.spec.schedules }}
             {{- $scheduleFrom := .scheduleFrom | date "2025-03-14T07:35:05Z" }}
             {{- $scheduleUntil := .scheduleUntil | date "2025-03-15T07:35:05Z" }}

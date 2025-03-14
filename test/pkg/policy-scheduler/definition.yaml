@@ -43,4 +43,4 @@ spec:
                       scheduleUntil:
                         type: string
                         format: date-time
-                        description:  description: The timestamp when the policy should be detached from the role (ISO 8601 format, e.g., 2025-03-15T07:35:05Z)
+                        description:  The timestamp when the policy should be detached from the role (ISO 8601 format, e.g., 2025-03-15T07:35:05Z)
