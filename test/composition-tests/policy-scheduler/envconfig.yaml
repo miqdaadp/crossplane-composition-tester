@@ -1,0 +1,7 @@
+apiVersion: apiextensions.crossplane.io/v1alpha1
+kind: EnvironmentConfig
+metadata:
+  name: envconfig
+data:
+  accountId: "039612886070"
+  region: "global"
