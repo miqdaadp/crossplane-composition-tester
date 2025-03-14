@@ -1,3 +1,32 @@
+## Miqdaad Comments #
+
+=>> After checking the main code and the way everything is setup , I set the composition file , defination files and other important claim files  in the similar pattern.
+
+==>> Tried creating demo roles and policies in AWS using the cross plane.
+==>> The composition file and BDD (policy-schedule-feature)is updated accordingly.
+==>> Secrets and other important yaml is added in repo as well for your reference.
+
+There is a file which is resource_created.txt under composition-tests/policy-scheduler. Updated all the resources created on my test kubernetes cluster.
+
+Challenges faced:
+
+==>> Somehow all the tests are not executed successfully as when i did some changes to composition file it goes into waiting state.
+
+    Schedule Until:  2025-03-15T07:35:05Z
+Status:
+  Conditions:
+    Last Transition Time:  2025-03-14T08:03:49Z
+    Reason:                ReconcileSuccess
+    Status:                True
+    Type:                  Synced
+    Last Transition Time:  2025-03-14T08:03:49Z
+    Message:               Claim is waiting for composite resource to become Ready
+    Reason:                Waiting
+    Status:                False
+    Type:                  Ready
+
+
+
 # Crossplane Composition Tester
 Test Crossplane compositions implemented with composition functions using BDD (Behavior Driven Development). 
 If you're not familiar with BDD, check out [this](https://cucumber.io/docs/bdd/). 
@@ -12,7 +41,7 @@ is a python implementation of Cucumber. We also use Python to implement the step
 You need to have the [**Crossplane CLI**](https://docs.crossplane.io/latest/cli/) and [**behave**](https://behave.readthedocs.io/en/latest/) installed. You will also need to install
 the other dependencies in `requirements.txt` for the python steps implementation of the features.
 ```bash
-# Install the python dependencies 
+# Install the python dependencies
 pip install -r requirements.txt
 
 # Install the latest version of crossplane cli
