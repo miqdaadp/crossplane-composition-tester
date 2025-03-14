@@ -79,17 +79,7 @@ spec:
               name: {{ .policyArn | base | split ":" | last }}
             spec:
               forProvider:
-                document: |
-                  {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": "s3:ListBucket",
-                        "Resource": "*"
-                      }
-                    ]
-                  }
+                policyArn: {{ .policyArn }}
               providerConfigRef:
                 name: aws-provider
             readinessChecks:
