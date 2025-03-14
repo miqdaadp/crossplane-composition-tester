@@ -1,0 +1,24 @@
+root@DESKTOP-K72AJQ9:~/crossplane-composition-tester/test/pkg/policy-scheduler# kubectl get provider --all-namespaces
+NAME                                            AGE
+providerconfig.aws.crossplane.io/aws-provider   3h19m
+
+
+
+root@DESKTOP-K72AJQ9:~/crossplane-composition-tester/test/pkg/policy-scheduler# kubectl get Policyscheduler -n crossplane-system
+NAME              SYNCED   READY   CONNECTION-SECRET   AGE
+scheduler-claim   True     False                       154m
+
+
+root@DESKTOP-K72AJQ9:~/crossplane-composition-tester/test/pkg/policy-scheduler# kubectl get Policyscheduler -n crossplane-system
+NAME              SYNCED   READY   CONNECTION-SECRET   AGE
+scheduler-claim   True     False                       160m
+
+
+root@DESKTOP-K72AJQ9:~/crossplane-composition-tester/test/pkg/policy-scheduler# kubectl get XPolicyScheduler
+NAME                    SYNCED   READY   COMPOSITION   AGE
+scheduler-claim-x852g                                  160m
+
+
+root@DESKTOP-K72AJQ9:~/crossplane-composition-tester/test/pkg/policy-scheduler# kubectl get composition
+NAME                               XR-KIND            XR-APIVERSION                          AGE
+xpolicyscheduler.aws.example.com   XPolicyScheduler   policyscheduler.example.com/v1alpha1   163m

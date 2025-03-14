@@ -1,0 +1,171 @@
+(.ansible) root@DESKTOP-K72AJQ9:~/crossplane-composition-tester# ./tests_runner.sh test -t PolicyScheduler -t normal
+Checking Crossplane cli version ...
+Crossplane version v1.19.0 is at least the minimum required v1.17.3
+Execute the tests from project folder test and tests subfolder composition-tests
+Running tests with tags: PolicyScheduler normal
+'.target_project' -> 'test'
+Running locally!
+@PolicyScheduler
+Feature: Policy scheduler composition # .target_project/composition-tests/policy-scheduler/policy-scheduler.feature:16
+  Tests the policy scheduler composition
+  Background:   # .target_project/composition-tests/policy-scheduler/policy-scheduler.feature:19
+
+  @normal
+  Scenario: Test the role and policies as per the schedule                           # .target_project/composition-tests/policy-scheduler/policy-scheduler.feature:28
+    Given input claim xr.yaml                                                        # steps/composition_tester.py:83 0.007s
+    And input composition composition.yaml                                           # steps/composition_tester.py:113 0.000s
+    And input functions functions.yaml                                               # steps/composition_tester.py:154 0.000s
+    Then check that no resources are provisioning                                    # steps/composition_tester.py:227 0.000s
+    When crossplane renders the composition                                          # steps/composition_tester.py:197 0.147s
+      Assertion Failed: error rendering: crossplane: error: composition's compositeTypeRef.kind (XPolicyScheduler) does not match XR's kind (PolicyScheduler)
+
+    Then check that 2 resources are provisioning                                     # None
+    And check that resource role has parameters                                      # None
+      | param name    | param value          |
+      | scheduleFrom  | 2025-03-14T07:35:05Z |
+      | scheduleUntil | 2025-03-15T07:35:05Z |
+      | metadata.name | scheduler-claim      |
+    Given change observed resource role with status NOT READY and parameters         # None
+      | param name            | param value |
+      | status.atProvider.arn | arn::role   |
+    And change observed resource default-policy with status NOT READY and parameters # None
+      | param name            | param value         |
+      | status.atProvider.arn | arn::default-policy |
+    When crossplane renders the composition                                          # None
+    Then check that 2 resources are provisioning and they are                        # None
+      | resource-name  |
+      | role           |
+      | default-policy |
+    Given change all observed resources with status READY                            # None
+    When crossplane renders the composition                                          # None
+    Then log desired resources                                                       # None
+    Given change all observed resources with status NOT READY                        # None
+    When crossplane renders the composition                                          # None
+    Then log desired resources                                                       # None
+
+Feature: Service Account composition # .target_project/composition-tests/service-account-with-functions/service-account.feature:15
+  Tests the service account compositions
+  Background:   # .target_project/composition-tests/service-account-with-functions/service-account.feature:18
+
+  @critical
+  Scenario: service account with default policies                                     # .target_project/composition-tests/service-account-with-functions/service-account.feature:27
+    Given input claim claim.yaml                                                      # None
+    And input composition composition.yaml                                            # None
+    And input functions functions.yaml                                                # None
+    Then check that no resources are provisioning                                     # None
+    When crossplane renders the composition                                           # None
+    Then check that 2 resources are provisioning                                      # None
+    And check that resource role has parameters                                       # None
+      | param name    | param value   |
+      | metadata.name | green-demo-sa |
+    Given change observed resource role with status NOT READY and parameters          # None
+      | param name            | param value |
+      | status.atProvider.arn | arn::role   |
+    And change observed resource default-policy with status NOT READY and parameters  # None
+      | param name            | param value         |
+      | status.atProvider.arn | arn::default-policy |
+    When crossplane renders the composition                                           # None
+    Then check that 2 resources are provisioning and they are                         # None
+      | resource-name  |
+      | role           |
+      | default-policy |
+    Given change observed resource role with status READY                             # None
+    And change observed resource default-policy with status READY                     # None
+    When crossplane renders the composition                                           # None
+    Then check that 4 resources are provisioning and they are                         # None
+      | resource-name                    |
+      | role                             |
+      | default-policy                   |
+      | green-demo-sa-rpa-default-policy |
+      | green-demo-sa                    |
+    And check that resource green-demo-sa-rpa-default-policy has parameters           # None
+      | param name                | param value   |
+      | spec.forProvider.roleName | green-demo-sa |
+    Given change observed resource green-demo-sa-rpa-default-policy with status READY # None
+    And change observed resource green-demo-sa with status READY                      # None
+    When crossplane renders the composition                                           # None
+
+  @normal
+  Scenario: service account with 1 policyARN                                          # .target_project/composition-tests/service-account-with-functions/service-account.feature:71
+    Given input claim claim.yaml                                                      # None
+    And input composition composition.yaml                                            # None
+    And input functions functions.yaml                                                # None
+    Then check that no resources are provisioning                                     # None
+    Given input claim is changed with parameters                                      # None
+      | param name       | param value       |
+      | spec.policiesARN | \\list policyArn1 |
+    When crossplane renders the composition                                           # None
+    Then check that 2 resources are provisioning                                      # None
+    Given change observed resource role with status READY and parameters              # None
+      | param name            | param value |
+      | status.atProvider.arn | arn::role   |
+    And change observed resource default-policy with status READY and parameters      # None
+      | param name            | param value         |
+      | status.atProvider.arn | arn::default-policy |
+    When crossplane renders the composition                                           # None
+    Then check that 5 resources are provisioning and they are                         # None
+      | resource-name                    |
+      | role                             |
+      | default-policy                   |
+      | green-demo-sa-rpa-default-policy |
+      | green-demo-sa-rpa-0              |
+      | green-demo-sa                    |
+    And check that resource green-demo-sa-rpa-0 has parameters                        # None
+      | param name                 | param value   |
+      | spec.forProvider.roleName  | green-demo-sa |
+      | spec.forProvider.policyArn | policyArn1    |
+    Given change observed resource green-demo-sa-rpa-default-policy with status READY # None
+    Given change observed resource green-demo-sa-rpa-0 with status READY              # None
+    And change observed resource green-demo-sa with status READY                      # None
+    When crossplane renders the composition                                           # None
+    Then check that 5 resources are provisioning                                      # None
+
+  @minor
+  Scenario: service account with 2 policyARNs                   # .target_project/composition-tests/service-account-with-functions/service-account.feature:108
+    Given input claim claim.yaml                                # None
+    And input composition composition.yaml                      # None
+    And input functions functions.yaml                          # None
+    Then check that no resources are provisioning               # None
+    Given input claim is changed with parameters                # None
+      | param name       | param value                  |
+      | spec.policiesARN | \\list policyArn1,policyArn2 |
+    When crossplane renders the composition                     # None
+    Then check that 2 resources are provisioning                # None
+    Given change following observed resources with status READY # None
+      | resource-name  |
+      | role           |
+      | default-policy |
+    And change observed resource role with parameters           # None
+      | param name            | param value |
+      | status.atProvider.arn | arn::role   |
+    And change observed resource default-policy with parameters # None
+      | param name            | param value         |
+      | status.atProvider.arn | arn::default-policy |
+    When crossplane renders the composition                     # None
+    Then check that 6 resources are provisioning and they are   # None
+      | resource-name                    |
+      | role                             |
+      | default-policy                   |
+      | green-demo-sa-rpa-default-policy |
+      | green-demo-sa-rpa-0              |
+      | green-demo-sa-rpa-1              |
+      | green-demo-sa                    |
+    And check that resource green-demo-sa-rpa-0 has parameters  # None
+      | param name                 | param value   |
+      | spec.forProvider.roleName  | green-demo-sa |
+      | spec.forProvider.policyArn | policyArn1    |
+    Given change all observed resources with status READY       # None
+    When crossplane renders the composition                     # None
+    Then log desired resources                                  # None
+    Given change all observed resources with status NOT READY   # None
+    When crossplane renders the composition                     # None
+    Then log desired resources                                  # None
+
+
+Failing scenarios:
+  .target_project/composition-tests/policy-scheduler/policy-scheduler.feature:28  Test the role and policies as per the schedule
+
+0 features passed, 1 failed, 1 skipped
+0 scenarios passed, 1 failed, 3 skipped
+4 steps passed, 1 failed, 67 skipped, 0 undefined
+Took 0m0.155s
